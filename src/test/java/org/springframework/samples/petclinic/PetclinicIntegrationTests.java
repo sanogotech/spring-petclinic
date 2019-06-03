@@ -16,13 +16,15 @@
 
 package org.springframework.samples.petclinic;
 
+import io.hypersistence.optimizer.HypersistenceOptimizer;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.samples.petclinic.vet.VetRepository;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -31,9 +33,14 @@ public class PetclinicIntegrationTests {
     @Autowired
     private VetRepository vets;
 
+    @Autowired
+    private HypersistenceOptimizer hypersistenceOptimizer;
+
     @Test
     public void testFindAll() throws Exception {
         vets.findAll();
         vets.findAll(); // served from cache
+
+        assertTrue(hypersistenceOptimizer.getEvents().isEmpty());
     }
 }
